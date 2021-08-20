@@ -1,7 +1,7 @@
-import readline from "readline";
+import readline from "readline"; // importuojamas modulis readline
 import mysql from "mysql"; // importuojamas mysql modulis
 
-const rl = readline.createInterface({
+const rl = readline.createInterface({ // funkcija teksto ivedimui terminale
     input: process.stdin,
     output: process.stdout,
 });
@@ -19,7 +19,7 @@ const conn = mysql.createConnection({ // prisijungimas prie mysql serverio
     user: "nodejs",
     password: "nodejs123456",
     database: "zmones", // duomenu bazes pavadinimas
-    multipleStatements: true,
+    multipleStatements: true, // sio parametro default yra false
 });
 
 // conn.connect(); prisijungimas prie servverio, callback
@@ -115,13 +115,17 @@ try {
     // `update zmones set vardas = '${vardas}', alga = ${alga} where id = ${id}`
    // )
 
-    let vardas = await inputText("Naujas vardas: ");
-    let alga = parseFloat(await inputText("Kokia bus alga?: "));
-    let id = parseInt(await inputText("Koks id: "));
+
+   // inputText kvieciama funkcija su await, bus isvedama terminale klausimas ir tada vedama reiksme, grazina kaip string'a
+    let vardas = await inputText("Naujas vardas: "); // Terminale bus naudojimas Naujas vardas ir jis tada ivedamas
+    let alga = parseFloat(await inputText("Kokia bus alga?: ")); // Terminale ismetamas klausimas // parseFloat pavercia skaiciumi
+    let id = parseInt(await inputText("Koks id: ")); // Terminale ismetamas klausimas // parseInt gaunamas sveikas skaicius
     await dbQuery(
         `update zmones set vardas = ?, alga = ?, gim_data = ? where id = ?`,
-        [vardas, alga, new Date(), id]
+        [vardas, alga, new Date(), id] // masyvas su tiek elementu, kiek yra klaustuku
     );
+    // parasius id, jei suras toki id tada update padarys
+    // jei iterpiant nauja irasa, nauja id sukurs, auto increment
 
     r = await dbQuery(`
   select vardas, pavarde, tipas, reiksme
